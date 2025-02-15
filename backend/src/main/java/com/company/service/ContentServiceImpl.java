@@ -1,0 +1,119 @@
+package com.company.service;
+
+import com.company.dto.ContentRequestDTO;
+import com.company.dto.ContentResponseDTO;
+import com.company.entity.Content;
+import com.company.exception.ResourceNotFoundException;
+import com.company.repository.ContentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ContentServiceImpl implements ContentService {
+
+    @Autowired
+    private ContentRepository contentRepository;
+
+    @Override
+    public ContentResponseDTO addContent(ContentRequestDTO contentRequestDTO) {
+        Content content = new Content();
+        content.setTitle(contentRequestDTO.getTitle());
+        content.setDescription(contentRequestDTO.getDescription());
+        content.setContentText(contentRequestDTO.getContentText());
+        content.setImageUrl(contentRequestDTO.getImageUrl());
+        content.setPublished(false);  // Default tidak dipublikasikan
+
+        Content savedContent = contentRepository.save(content);
+
+        return new ContentResponseDTO(
+                savedContent.getId(),
+                savedContent.getTitle(),
+                savedContent.getDescription(),
+                savedContent.getContentText(),
+                savedContent.getImageUrl(),
+                savedContent.isPublished()
+        );
+    }
+
+    @Override
+    public ContentResponseDTO updateContent(Long contentId, ContentRequestDTO contentRequestDTO) {
+        Content existingContent = contentRepository.findById(contentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Content not found with id: " + contentId));
+
+        existingContent.setTitle(contentRequestDTO.getTitle());
+        existingContent.setDescription(contentRequestDTO.getDescription());
+        existingContent.setContentText(contentRequestDTO.getContentText());
+        existingContent.setImageUrl(contentRequestDTO.getImageUrl());
+
+        Content updatedContent = contentRepository.save(existingContent);
+
+        return new ContentResponseDTO(
+                updatedContent.getId(),
+                updatedContent.getTitle(),
+                updatedContent.getDescription(),
+                updatedContent.getContentText(),
+                updatedContent.getImageUrl(),
+                updatedContent.isPublished()
+        );
+    }
+
+    @Override
+    public void deleteContent(Long contentId) {
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Content not found with id: " + contentId));
+        contentRepository.delete(content);
+    }
+
+    @Override
+    public ContentResponseDTO getContentById(Long contentId) {
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Content not found with id: " + contentId));
+
+        return new ContentResponseDTO(
+                content.getId(),
+                content.getTitle(),
+                content.getDescription(),
+                content.getContentText(),
+                content.getImageUrl(),
+                content.isPublished()
+        );
+    }
+
+    @Override
+    public List<ContentResponseDTO> getAllContents() {
+        List<Content> contents = contentRepository.findAll();
+        return contents.stream()
+                .map(content -> new ContentResponseDTO(
+                        content.getId(),
+                        content.getTitle(),
+                        content.getDescription(),
+                        content.getContentText(),
+                        content.getImageUrl(),
+                        content.isPublished()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ContentResponseDTO publishContent(Long contentId) {
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Content not found with id: " + contentId));
+
+        content.setPublished(true);
+        Content updatedContent = contentRepository.save(content);
+
+        return new ContentResponseDTO(
+                updatedContent.getId(),
+                updatedContent.getTitle(),
+                updatedContent.getDescription(),
+                updatedContent.getContentText(),
+                updatedContent.getImageUrl(),
+                updatedContent.isPublished()
+        );
+    }
+}
+
+
