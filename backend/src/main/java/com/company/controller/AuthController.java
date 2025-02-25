@@ -9,6 +9,11 @@ import com.company.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,9 +32,14 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<String> signin(@RequestBody SigninRequest request) {
+    public ResponseEntity<Map<String, String>> signin(@RequestBody SigninRequest request) {
         String token = authService.signin(request);
-        return ResponseEntity.ok(token);
+
+        // Bungkus token dalam format JSON
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signout")
