@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 <template>
   <div class="flex">
     <Sidebar />
