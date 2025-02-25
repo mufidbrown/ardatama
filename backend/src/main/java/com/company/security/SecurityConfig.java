@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.company.config.CorsConfig;
 
 @Configuration
 @EnableWebSecurity
@@ -20,27 +21,30 @@ public class SecurityConfig {
 
     private final CustomUserDetailService customUserDetailsService;
     private final JwtFilter jwtFilter;
+    private final CorsConfig corsConfig;
 
-    public SecurityConfig(CustomUserDetailService customUserDetailService, JwtFilter jwtFilter) {
+    public SecurityConfig(CustomUserDetailService customUserDetailService, JwtFilter jwtFilter, CorsConfig corsConfig) {
         this.customUserDetailsService = customUserDetailService;
         this.jwtFilter = jwtFilter;
+        this.corsConfig = corsConfig;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf
-                        .disable())  // Disabling CSRF for REST APIs (adjust as needed for your use case)
+        http
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable()) // Disable CSRF jika tidak dibutuhkan
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.POST, "/api/auth/signup", "/api/auth/signin", "/api/auth/signout").permitAll()  // Allow sign up and sign in without authentication
-                        .requestMatchers(HttpMethod.GET, "/api/user/profile").permitAll()  // Endpoint untuk profile harus diizinkan
-                        .requestMatchers(HttpMethod.PUT, "/api/user/profile").authenticated()  // Profile access should be authenticated
-                        .requestMatchers(HttpMethod.GET, "/api/auth/profile").authenticated()  // Profile access should be authenticated
-                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()  // Allow forgot-password endpoint without authentication
-                        .requestMatchers(HttpMethod.GET, "/api/content/all").permitAll()  // Endpoint untuk profile harus diizinkan
-                        .requestMatchers(HttpMethod.GET, "/api/content/contentId").permitAll()  // Endpoint untuk profile harus diizinkan
-                        .anyRequest().authenticated()  // All other requests require authentication
+                        .requestMatchers(HttpMethod.POST, "/api/auth/signup", "/api/auth/signin", "/api/auth/signout").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/user/profile").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/user/profile").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/profile").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/content/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/content/contentId").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);  // Add JWT filter to the chain
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -56,7 +60,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();  // Use BCryptPasswordEncoder for encoding passwords
     }
 }
-
 
 
 /*
