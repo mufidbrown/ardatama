@@ -5,6 +5,10 @@ import { useAuthStore } from "@/store/auth";
 import AdminLayout from "@/layouts/AdminLayout.vue";
 import PublicLayout from "@/layouts/PublicLayout.vue";
 
+import ForgotPassword from '../pages/auth/ForgotPassword.vue';
+import ResetPassword from '../pages/auth/ResetPassword.vue';
+
+
 // Public Pages
 import Home from "@/pages/public/Home.vue";
 import About from "@/pages/public/About.vue";
@@ -31,8 +35,10 @@ const routes = [
       { path: "service", component: Service },
       { path: "portfolio", component: Portfolio },
       { path: "contact", component: Contact },
-      { path: "login", component: Login },
       { path: "register", component: Register },
+      { path: "login", component: Login },
+      { path: '/forgot-password', component: ForgotPassword },
+      { path: '/reset-password', component: ResetPassword }
     ],
   },
   // Admin Routes (Proteksi dengan middleware)
@@ -41,7 +47,7 @@ const routes = [
     component: AdminLayout,
     meta: { requiresAuth: true }, // ✅ Middleware
     children: [
-      { path: "", component: Dashboard },
+      { path: "dashboard", component: Dashboard },
       { path: "content", component: Content },
       { path: "users", component: Users },
       { path: "settings", component: Settings },

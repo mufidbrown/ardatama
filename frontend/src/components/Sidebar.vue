@@ -3,10 +3,10 @@
     <h2 class="text-lg font-bold mb-4">Admin Menu</h2>
     <ul>
       <li class="mb-2">
-        <a href="/admin/dashboard" class="block px-3 py-2 rounded hover:bg-gray-700">Dashboard</a>
+        <a href="/admin-panel/dashboard" class="block px-3 py-2 rounded hover:bg-gray-700">Dashboard</a>
       </li>
       <li class="mb-2">
-        <a href="/admin/content" class="block px-3 py-2 rounded hover:bg-gray-700">Manage Content</a>
+        <a href="/admin-panel/content" class="block px-3 py-2 rounded hover:bg-gray-700">Manage Content</a>
       </li>
       <li class="mb-2">
         <a href="/admin-panel/settings" class="block px-3 py-2 rounded hover:bg-gray-700">Settings</a>
