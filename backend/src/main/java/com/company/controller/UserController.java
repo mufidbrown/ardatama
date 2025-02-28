@@ -62,7 +62,7 @@ public class UserController {
      * Endpoint untuk menambahkan konten baru
      */
     @PostMapping("/create")
-    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
+    @PreAuthorize("isAuthenticated()") // Hanya yang login bisa mengakses
     public ResponseEntity<ContentResponseDTO> addContent(@RequestBody ContentRequestDTO contentRequestDTO) {
         ContentResponseDTO contentResponseDTO = contentService.addContent(contentRequestDTO);
         return new ResponseEntity<>(contentResponseDTO, HttpStatus.CREATED);
