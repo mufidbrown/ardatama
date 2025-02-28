@@ -11,6 +11,9 @@
       <li class="mb-2">
         <a href="/admin-panel/settings" class="block px-3 py-2 rounded hover:bg-gray-700">Settings</a>
       </li>
+      <li class="mb-2">
+        <a href="/admin-panel/users" class="block px-3 py-2 rounded hover:bg-gray-700">Users</a>
+      </li>
     </ul>
   </aside>
 </template>

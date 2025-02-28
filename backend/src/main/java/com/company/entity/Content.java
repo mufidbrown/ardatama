@@ -21,6 +21,14 @@ public class Content {
     @JoinColumn(name = "user_id") // Foreign key to the User table
     private User user;
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }
