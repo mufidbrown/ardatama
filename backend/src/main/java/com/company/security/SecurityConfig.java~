@@ -36,21 +36,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF jika tidak dibutuhkan
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup", "/api/auth/signin", "/api/auth/signout").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/user/profile").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/user/profile").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/user/profile").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/auth/profile").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/content/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/content/contentId").permitAll()
-<<<<<<< HEAD
-                        .requestMatchers(HttpMethod.POST, "/api/content/create").authenticated() // Only authenticated users can create content
-                        .requestMatchers(HttpMethod.PUT, "/api/content/{contentId}").authenticated() // Only authenticated users can update content
-                        .requestMatchers(HttpMethod.DELETE, "/api/content/{contentId}").authenticated() // Only authenticated users can delete content
-                        .requestMatchers(HttpMethod.PUT, "/api/content/{contentId}/publish").authenticated() // Only authenticated users can publish content
-=======
                         .requestMatchers("/api/admin/**").authenticated() // Halaman admin harus login
                         .requestMatchers("/api/auth/**").permitAll() // Pastikan ini ada
->>>>>>> 8eaca956ddb4700040f16d96a52030c86b6bb695
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

@@ -16,7 +16,8 @@ public interface UserService {
      * Memperbarui profil pengguna.
      *
      * @param username Username pengguna
+     * @param profile Data profil yang diperbarui
      */
-    UserProfileResponse updateUserProfile(String username, UserProfileUpdateRequest request);
+    UserProfileResponse updateUserProfile(String username, UserProfileUpdateRequest request, UserProfileResponse profile);
 }
 

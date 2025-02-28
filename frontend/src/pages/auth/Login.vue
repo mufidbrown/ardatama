@@ -1,3 +1,5 @@
+
+
 <template>
   <div class="flex min-h-screen items-center justify-center bg-gray-100">
     <div class="w-full max-w-sm bg-white p-6 rounded-2xl shadow-lg">
@@ -13,7 +15,7 @@
         <input
           v-model="credentials.password"
           type="password"
-          placeholder="Password"
+          placeholder="Password" 
           required
           class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
         />
@@ -27,9 +29,18 @@
       </form>
       <p class="text-center mt-4">
         Belum punya akun?
-        <router-link to="/register" class="text-blue-600 hover:underline"
-          >Daftar</router-link
-        >
+        <router-link to="/register" class="text-blue-600 hover:underline">
+          Daftar
+        </router-link>
+      </p>
+      <p class="text-center mt-2">
+        <router-link to="/forgot-password" class="text-red-600 hover:underline">
+          Lupa Password?
+        </router-link>
+        |
+        <router-link to="/reset-password" class="text-red-600 hover:underline">
+          Reset Password
+        </router-link>
       </p>
     </div>
   </div>

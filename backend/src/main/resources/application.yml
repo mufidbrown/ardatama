@@ -1,12 +1,11 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/abcdb
-    username: postgres
-    password: komariah321
+    username: mufiddev
+    password: bismillah
   jpa:
     hibernate:
       ddl-auto: update
-
 
   mail:
     host: smtp.gmail.com
@@ -19,21 +18,6 @@ spring:
           auth: true
           starttls:
             enable: true
-
-
-
-
-      #  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: ilhammufid@students.amikom.ac.id
-#    password: dsbmndceuaqcexop
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
 
       logging:
         level:

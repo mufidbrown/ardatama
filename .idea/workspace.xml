@@ -31,14 +31,20 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/backend/src/main/java/com/company/security/SecurityConfig.java" root0="SKIP_INSPECTION" />
   </component>
+<<<<<<< HEAD
+=======
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+>>>>>>> fikri
   <component name="ProjectId" id="2t4UqiVNxuNKdxCdJvZGFHjVI5x" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
+  <component name="RunManager">
+=======
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -58,6 +64,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+>>>>>>> fikri
     <configuration name="CompanyProfileApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="company-profile" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.company.CompanyProfileApplication" />
