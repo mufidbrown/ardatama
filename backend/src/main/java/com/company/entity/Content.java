@@ -14,12 +14,22 @@ public class Content {
     private String title;
     private String description;
     private String contentText;
-    private String imageUrl; // URL gambar atau file
+
+    @Column(length = 1000) // URL bisa panjang
+    private String imageUrl;
     private boolean isPublished;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id") // Foreign key to the User table
     private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;

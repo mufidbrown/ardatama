@@ -59,13 +59,23 @@ public class ContentController {
     }
 
     /**
-     * Endpoint untuk menghapus konten berdasarkan ID
+     * 🔹 Endpoint untuk menghapus konten berdasarkan ID (Proteksi dengan Bearer Token)
      */
     @DeleteMapping("/{contentId}")
-    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
-    public ResponseEntity<Void> deleteContent(@PathVariable Long contentId) {
-        contentService.deleteContent(contentId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PreAuthorize("isAuthenticated()") // Hanya user yang login yang bisa delete
+    public ResponseEntity<?> deleteContent(@PathVariable Long contentId,
+                                           @RequestHeader("Authorization") String authHeader) {
+        // 🔍 Validasi Token JWT
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
+        }
+
+        try {
+            contentService.deleteContent(contentId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found with id: " + contentId);
+        }
     }
 
     /**

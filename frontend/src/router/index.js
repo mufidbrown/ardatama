@@ -24,6 +24,8 @@ import Content from "@/pages/admin/Content.vue";
 import Users from "@/pages/admin/Users.vue";
 import Settings from "@/pages/admin/Settings.vue";
 import ContentDetail from "@/pages/admin/ContentDetail.vue";
+import CreateContent from "@/pages/admin/CreateContent.vue";
+import UpdateContent from "@/pages/admin/UpdateContent.vue";
 
 const routes = [
   { path: "/login", redirect: "/auth/login" },
@@ -64,12 +66,11 @@ const routes = [
     component: AdminLayout,
     meta: { requiresAuth: true }, // ✅ Middleware
     children: [
-<<<<<<< HEAD
+      { path: "content/create", component: CreateContent },
       { path: "content/:id", component: ContentDetail },
+      { path: "content/edit/:id", component: UpdateContent },
       { path: "", component: Dashboard },
-=======
       { path: "dashboard", component: Dashboard },
->>>>>>> 8eaca956ddb4700040f16d96a52030c86b6bb695
       { path: "content", component: Content },
       { path: "users", component: Users },
       { path: "settings", component: Settings },

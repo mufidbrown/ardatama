@@ -4,8 +4,24 @@
       Content Management
     </h1>
 
+    <!-- 🔹 Tombol ke Halaman Create Content -->
+    <div class="mb-4">
+      <router-link to="/admin-panel/content/create">
+        <button
+          class="px-5 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 shadow-md transition transform hover:scale-105"
+        >
+          ➕ Add New Content
+        </button>
+      </router-link>
+    </div>
+
     <!-- Loading Spinner -->
-    <div v-if="store.loading" class="text-center p-4">Loading...</div>
+    <div
+      v-if="store.loading"
+      class="text-center p-4 text-lg font-semibold text-gray-600"
+    >
+      Loading...
+    </div>
 
     <!-- List Content -->
     <div v-else class="mt-6 overflow-x-auto">
@@ -21,42 +37,44 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="content in store.contents"
-            :key="content.id"
-            class="hover:bg-gray-50 transition"
-          >
+          <tr v-for="content in store.contents" :key="content.id" class="hover:bg-gray-50 transition">
             <td class="border border-gray-300 px-4 py-2 text-center text-sm">{{ content.id }}</td>
-            <td class="border border-gray-300 px-4 py-2 text-sm">{{ content.title }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-sm font-semibold">{{ content.title }}</td>
             <td class="border border-gray-300 px-4 py-2 text-sm">{{ content.description }}</td>
             <td class="border border-gray-300 px-4 py-2 text-sm">
-              <img
-                :src="content.imageUrl"
-                alt="Image"
-                class="w-16 h-16 object-cover rounded-lg"
-              />
+              <img :src="content.imageUrl" alt="Image" class="w-16 h-16 object-cover rounded-lg border border-gray-300 shadow-sm" />
             </td>
-            <td class="border border-gray-300 px-4 py-2 text-sm">
+            <td class="border border-gray-300 px-4 py-2 text-sm font-semibold">
               <span
-                :class="content.published ? 'text-green-500' : 'text-red-500'"
-                class="font-semibold"
+                :class="content.published ? 'text-green-600 bg-green-100 px-2 py-1 rounded-full' : 'text-red-600 bg-red-100 px-2 py-1 rounded-full'"
               >
                 {{ content.published ? "Published" : "Not Published" }}
               </span>
             </td>
             <td class="border border-gray-300 px-4 py-2 text-center">
-              <button
-                @click="editContent(content)"
-                class="px-3 py-1 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
-              >
-                Edit
-              </button>
-              <button
-                @click="deleteContent(content.id)"
-                class="px-3 py-1 text-white bg-red-500 rounded-lg hover:bg-red-600 transition"
-              >
-                Delete
-              </button>
+              <div class="flex flex-wrap gap-2 justify-center">
+                <!-- 🔹 Edit Button -->
+                <router-link :to="`/admin-panel/content/edit/${content.id}`">
+                  <button class="px-4 py-2 text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 shadow-md transition transform hover:scale-105">
+                    ✏️
+                  </button>
+                </router-link>
+
+                <!-- 🔹 Delete Button -->
+                <button
+                  @click="deleteContent(content.id)"
+                  class="px-4 py-2 text-white bg-black-100 rounded-lg hover:bg-red-600 shadow-md transition transform hover:scale-105"
+                >
+                  ❌
+                </button>
+
+                <!-- 🔹 View Details Button -->
+                <router-link :to="`/admin-panel/content/${content.id}`">
+                  <button class="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 shadow-md transition transform hover:scale-105">
+                    👁️
+                  </button>
+                </router-link>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -66,28 +84,7 @@
 </template>
 
 <script setup>
-import { useContentStore } from "@/store/content";
-import { onMounted } from "vue";
+import { useContentManagement } from "@/composables/useContentManagement";
 
-// Ambil store
-const store = useContentStore();
-
-// Panggil fetchContents() saat komponen dimuat
-onMounted(() => {
-  store.fetchContents();
-});
-
-// Fungsi untuk mengedit konten
-const editContent = (content) => {
-  console.log("Edit content", content);
-  // Implementasi untuk edit konten bisa dilakukan di sini
-};
-
-// Fungsi untuk menghapus konten
-const deleteContent = async (id) => {
-  if (confirm("Are you sure you want to delete this content?")) {
-    await store.deleteContent(id);
-    alert("Content deleted successfully");
-  }
-};
+const { store, deleteContent } = useContentManagement();
 </script>
