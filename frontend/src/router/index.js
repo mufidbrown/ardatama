@@ -19,6 +19,7 @@ import Dashboard from "@/pages/admin/Dashboard.vue";
 import Content from "@/pages/admin/Content.vue";
 import Users from "@/pages/admin/Users.vue";
 import Settings from "@/pages/admin/Settings.vue";
+import ContentDetail from "@/pages/admin/ContentDetail.vue";
 
 const routes = [
   // Public Routes
@@ -41,6 +42,7 @@ const routes = [
     component: AdminLayout,
     meta: { requiresAuth: true }, // ✅ Middleware
     children: [
+      { path: "content/:id", component: ContentDetail },
       { path: "", component: Dashboard },
       { path: "content", component: Content },
       { path: "users", component: Users },

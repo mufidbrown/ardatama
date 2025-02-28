@@ -42,6 +42,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/content/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/content/contentId").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/content/create").authenticated() // Only authenticated users can create content
+                        .requestMatchers(HttpMethod.PUT, "/api/content/{contentId}").authenticated() // Only authenticated users can update content
+                        .requestMatchers(HttpMethod.DELETE, "/api/content/{contentId}").authenticated() // Only authenticated users can delete content
+                        .requestMatchers(HttpMethod.PUT, "/api/content/{contentId}/publish").authenticated() // Only authenticated users can publish content
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

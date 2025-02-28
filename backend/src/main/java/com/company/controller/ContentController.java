@@ -1,10 +1,12 @@
 package com.company.controller;
 
+import com.company.dto.ContentRequestDTO;
 import com.company.dto.ContentResponseDTO;
 import com.company.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +33,48 @@ public class ContentController {
     @GetMapping("/{contentId}")
     public ResponseEntity<ContentResponseDTO> getContentById(@PathVariable Long contentId) {
         ContentResponseDTO contentResponseDTO = contentService.getContentById(contentId);
+        return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint untuk menambahkan konten baru
+     */
+    @PostMapping("/create")
+    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
+    public ResponseEntity<ContentResponseDTO> addContent(@RequestBody ContentRequestDTO contentRequestDTO) {
+        ContentResponseDTO contentResponseDTO = contentService.addContent(contentRequestDTO);
+        return new ResponseEntity<>(contentResponseDTO, HttpStatus.CREATED);
+    }
+
+    /**
+     * Endpoint untuk memperbarui konten berdasarkan ID
+     */
+    @PutMapping("/{contentId}")
+    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
+//    @PreAuthorize("hasRole('ADMIN')")  // Hanya admin yang bisa mengedit konten
+    public ResponseEntity<ContentResponseDTO> updateContent(@PathVariable Long contentId,
+                                                            @RequestBody ContentRequestDTO contentRequestDTO) {
+        ContentResponseDTO contentResponseDTO = contentService.updateContent(contentId, contentRequestDTO);
+        return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint untuk menghapus konten berdasarkan ID
+     */
+    @DeleteMapping("/{contentId}")
+    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
+    public ResponseEntity<Void> deleteContent(@PathVariable Long contentId) {
+        contentService.deleteContent(contentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Endpoint untuk memublikasikan konten berdasarkan ID
+     */
+    @PutMapping("/{contentId}/publish")
+    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
+    public ResponseEntity<ContentResponseDTO> publishContent(@PathVariable Long contentId) {
+        ContentResponseDTO contentResponseDTO = contentService.publishContent(contentId);
         return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
     }
 }
