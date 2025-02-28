@@ -4,10 +4,10 @@ import { useAuthStore } from "@/store/auth";
 // Layouts
 import AdminLayout from "@/layouts/AdminLayout.vue";
 import PublicLayout from "@/layouts/PublicLayout.vue";
+import AuthLayout from "@/layouts/AuthLayout.vue";
 
 import ForgotPassword from '../pages/auth/ForgotPassword.vue';
 import ResetPassword from '../pages/auth/ResetPassword.vue';
-
 
 // Public Pages
 import Home from "@/pages/public/Home.vue";
@@ -25,6 +25,8 @@ import Users from "@/pages/admin/Users.vue";
 import Settings from "@/pages/admin/Settings.vue";
 
 const routes = [
+  { path: "/login", redirect: "/auth/login" },
+  { path: "/register", redirect: "/auth/register" },
   // Public Routes
   {
     path: "/",
@@ -34,13 +36,27 @@ const routes = [
       { path: "about", component: About },
       { path: "service", component: Service },
       { path: "portfolio", component: Portfolio },
-      { path: "contact", component: Contact },
+      { path: "contact", component: Contact }
+      // { path: "register", component: Register },
+      // { path: "login", component: Login },
+      // { path: '/forgot-password', component: ForgotPassword },
+      // { path: '/reset-password', component: ResetPassword }
+    ],
+  },
+
+  // Auth Routes (Login/Register terpisah dengan layout sendiri)
+  {
+    path: "/auth",
+    component: AuthLayout, // ✅ Layout khusus untuk halaman autentikasi
+    children: [
       { path: "register", component: Register },
       { path: "login", component: Login },
       { path: '/forgot-password', component: ForgotPassword },
       { path: '/reset-password', component: ResetPassword }
     ],
   },
+
+  
   // Admin Routes (Proteksi dengan middleware)
   {
     path: "/admin-panel",
@@ -62,12 +78,26 @@ const router = createRouter({
 });
 
 // Middleware untuk proteksi admin route
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore();
+//   if (to.meta.requiresAuth && !authStore.token) {
+//     next("/login"); // Redirect ke login jika belum login
+//   } else {
+//     next(); // Lanjut ke halaman tujuan
+//   }
+// });
+
+
+// Middleware untuk proteksi admin route dan mencegah user login ulang jika sudah login
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
+
   if (to.meta.requiresAuth && !authStore.token) {
-    next("/login"); // Redirect ke login jika belum login
+    next("/auth/login"); // Jika belum login, redirect ke login
+  } else if ((to.path === "/auth/login" || to.path === "/auth/register") && authStore.token) {
+    next("/admin-panel/dashboard"); // Jika sudah login, redirect ke dashboard
   } else {
-    next(); // Lanjut ke halaman tujuan
+    next(); // Lanjutkan navigasi
   }
 });
 
