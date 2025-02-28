@@ -36,12 +36,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF jika tidak dibutuhkan
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup", "/api/auth/signin", "/api/auth/signout").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/user/profile").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/user/profile").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/user/profile").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/auth/profile").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/content/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/content/contentId").permitAll()
+                        .requestMatchers("/api/admin/**").authenticated() // Halaman admin harus login
                         .requestMatchers("/api/auth/**").permitAll() // Pastikan ini ada
                         .anyRequest().authenticated()
                 )

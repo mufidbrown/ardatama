@@ -3,6 +3,7 @@ package com.company.controller;
 import com.company.dto.ContentRequestDTO;
 import com.company.dto.ContentResponseDTO;
 import com.company.payload.UserProfileResponse;
+import com.company.payload.UserProfileUpdateRequest;
 import com.company.service.AuthService;
 import com.company.service.ContentService;
 import com.company.service.UserService;
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,14 +30,15 @@ public class UserController {
     /**
      * Mengambil profil pengguna berdasarkan username.
      *
-     * @param username Username pengguna
      * @return ResponseEntity dengan data profil pengguna
      */
     @GetMapping("/profile")
-    public ResponseEntity<UserProfileResponse> getUserProfile(@RequestParam String username) {
+    public ResponseEntity<UserProfileResponse> getUserProfile(Authentication authentication) {
+        String username = authentication.getName(); // Ambil username dari token JWT
         UserProfileResponse profile = userService.getUserProfile(username);
         return ResponseEntity.ok(profile);
     }
+
 
     /**
      * Memperbarui profil pengguna.
@@ -42,13 +47,16 @@ public class UserController {
      * @param profile Data profil yang diperbarui
      * @return ResponseEntity dengan status berhasil
      */
-    @PutMapping("/profile")
-    public ResponseEntity<String> updateUserProfile(@RequestParam String username,
-                                                    @RequestBody UserProfileResponse profile) {
-        // Memperbarui profil pengguna
-        userService.updateUserProfile(username, profile);
-        return ResponseEntity.ok("Profile updated successfully");
-    }
+
+
+
+//    @PutMapping("/profile")
+//    public ResponseEntity<String> updateUserProfile(@RequestParam String username,
+//                                                    @RequestBody UserProfileResponse profile) {
+//        // Memperbarui profil pengguna
+//        userService.updateUserProfile(username, profile);
+//        return ResponseEntity.ok("Profile updated successfully");
+//    }
 
     /**
      * Endpoint untuk menambahkan konten baru
@@ -63,13 +71,21 @@ public class UserController {
     /**
      * Endpoint untuk memperbarui konten berdasarkan ID
      */
-    @PutMapping("/{contentId}")
-    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
-//    @PreAuthorize("hasRole('ADMIN')")  // Hanya admin yang bisa mengedit konten
-    public ResponseEntity<ContentResponseDTO> updateContent(@PathVariable Long contentId,
-                                                            @RequestBody ContentRequestDTO contentRequestDTO) {
-        ContentResponseDTO contentResponseDTO = contentService.updateContent(contentId, contentRequestDTO);
-        return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
+//    @PutMapping("/{contentId}")
+//    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
+//    public ResponseEntity<ContentResponseDTO> updateContent(@PathVariable Long contentId,
+//                                                            @RequestBody ContentRequestDTO contentRequestDTO) {
+//        ContentResponseDTO contentResponseDTO = contentService.updateContent(contentId, contentRequestDTO);
+//        return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
+//    }
+    @PutMapping("/profile")
+    @PreAuthorize("isAuthenticated()") // Hanya user yang terautentikasi yang bisa update
+    public ResponseEntity<UserProfileResponse> updateUserProfile(
+            @RequestBody UserProfileUpdateRequest updateRequest,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        UserProfileResponse updatedProfile = userService.updateUserProfile(userDetails.getUsername(), updateRequest);
+        return ResponseEntity.ok(updatedProfile);
     }
 
     /**

@@ -15,7 +15,7 @@
         <input
           v-model="credentials.password"
           type="password"
-          placeholder="Password"
+          placeholder="Password" 
           required
           class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
         />
