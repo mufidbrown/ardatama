@@ -12,11 +12,11 @@ export const useAuthStore = defineStore("auth", {
     async login(credentials) {
       try {
         const response = await axios.post("http://localhost:8080/api/auth/signin", credentials);
-        console.log("✅ Response dari backend:", response.data); // Debugging
+        console.log("✅ Response dari backend:", response.data);
     
         if (response.data && response.data.token) {
-          this.token = response.data.token;  // Simpan token di state
-          localStorage.setItem("token", this.token); // Simpan token di localStorage
+          this.setToken(response.data.token); // ✅ Gunakan setToken agar token tersimpan dengan baik
+          return true; // ✅ Beri indikasi bahwa login sukses
         } else {
           throw new Error("Token tidak ditemukan dalam response!");
         }
@@ -24,7 +24,8 @@ export const useAuthStore = defineStore("auth", {
         console.error("❌ Login error:", error.response?.data || error.message);
         throw error;
       }
-    },    
+    },
+      
 
     setToken(token) {
       this.token = token;
@@ -45,17 +46,30 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
+    // async logout() {
+    //   try {
+    //     console.log("🔄 Logging out...");
+    //     await api.post("/api/auth/signout");
+    //     console.log("✅ Logout successful");
+    //   } catch (error) {
+    //     console.error("❌ Logout failed:", error.response?.data || error.message);
+    //   } finally {
+    //     this.clearSession(); // ✅ Pastikan sesi selalu dihapus
+    //   }
+    // },
     async logout() {
       try {
         console.log("🔄 Logging out...");
-        await api.post("/api/auth/signout");
-        console.log("✅ Logout successful");
+        await api.post("/api/auth/signout"); // Logout dari backend
       } catch (error) {
         console.error("❌ Logout failed:", error.response?.data || error.message);
       } finally {
-        this.clearSession(); // ✅ Pastikan sesi selalu dihapus
+        this.clearSession(); // ✅ Hapus sesi
+        window.location.href = "/auth/login"; // ✅ Redirect ke login setelah logout
       }
     },
+    
+    
 
     clearSession() {
       this.token = null;
