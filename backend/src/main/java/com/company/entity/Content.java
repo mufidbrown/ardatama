@@ -15,6 +15,7 @@ public class Content {
     private String description;
     private String contentText;
     private String imageUrl; // URL gambar atau file
+    private byte[] imageData;
     private boolean isPublished;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -67,6 +68,14 @@ public class Content {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 
     public boolean isPublished() {

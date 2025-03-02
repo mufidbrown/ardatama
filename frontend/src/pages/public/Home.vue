@@ -6,8 +6,11 @@
         <div class="flex justify-between items-center h-16">
           <!-- Logo -->
           <div class="flex-shrink-0">
-            <a href="#" class="text-amber-600 font-bold text-xl">Ardatama</a>
+            <a href="#">
+              <img src="@/assets/images/logo.jpg" alt="Ardatama Logo" class="h-10">
+            </a>
           </div>
+
           
           <!-- Desktop Menu -->
           <div class="hidden md:block">
