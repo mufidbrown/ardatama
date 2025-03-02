@@ -109,19 +109,71 @@
       </p>
 
       <ul class="space-y-1 mb-8">
-        <li v-for="item in filteredMainMenu" :key="item.path">
-          <a
-            :href="item.path"
-            class="flex items-center px-4 py-3 rounded-lg hover:bg-indigo-500 hover:bg-opacity-20 transition-colors group"
-          >
-            <component
-              :is="item.icon"
-              class="w-5 h-5 mr-3 text-indigo-400 group-hover:text-indigo-300"
-            ></component>
-            <span class="group-hover:translate-x-1 transition-transform">{{
-              item.name
-            }}</span>
-          </a>
+        <li v-for="(item, index) in filteredMainMenu" :key="index">
+          <template v-if="item.name === 'Manage Content'">
+            <div>
+              <button
+                @click="toggleContentMenu"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-indigo-500 hover:bg-opacity-20 transition-colors group"
+                :class="{ 'bg-indigo-500 bg-opacity-20': showContentSubMenu }"
+              >
+                <div class="flex items-center">
+                  <component
+                    :is="item.icon"
+                    class="w-5 h-5 mr-3 text-indigo-400 group-hover:text-indigo-300"
+                  ></component>
+                  <span class="group-hover:translate-x-1 transition-transform">{{ item.name }}</span>
+                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-4 h-4 transition-transform duration-200"
+                  :class="{ 'rotate-180': showContentSubMenu }"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+              
+              <!-- Content Sub-menu (for mobile) -->
+              <div
+                v-if="showContentSubMenu && !isLargeScreen"
+                class="mt-1 ml-10 space-y-1 border-l-2 border-indigo-500 pl-3"
+              >
+                <div v-for="(category, catIndex) in contentCategories" :key="catIndex" class="py-2">
+                  <div class="text-indigo-400 font-medium mb-2">{{ category.name }}</div>
+                  <a
+                    v-for="(subItem, subIndex) in category.items"
+                    :key="subIndex"
+                    :href="subItem.path"
+                    class="block py-1.5 px-3 rounded-md hover:bg-indigo-500 hover:bg-opacity-20 transition-colors text-gray-300 hover:text-white text-sm"
+                  >
+                    {{ subItem.name }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <a
+              :href="item.path"
+              class="flex items-center px-4 py-3 rounded-lg hover:bg-indigo-500 hover:bg-opacity-20 transition-colors group"
+            >
+              <component
+                :is="item.icon"
+                class="w-5 h-5 mr-3 text-indigo-400 group-hover:text-indigo-300"
+              ></component>
+              <span class="group-hover:translate-x-1 transition-transform">{{
+                item.name
+              }}</span>
+            </a>
+          </template>
         </li>
       </ul>
 
@@ -130,7 +182,7 @@
       </p>
 
       <ul class="space-y-1">
-        <li v-for="item in filteredManagementMenu" :key="item.path">
+        <li v-for="(item, index) in filteredManagementMenu" :key="index">
           <a
             :href="item.path"
             class="flex items-center px-4 py-3 rounded-lg hover:bg-indigo-500 hover:bg-opacity-20 transition-colors group"
@@ -147,6 +199,53 @@
       </ul>
     </aside>
 
+    <!-- Content menu panel (appears next to sidebar on larger screens) -->
+    <div
+      v-if="showContentSubMenu && isLargeScreen"
+      class="fixed left-72 top-0 h-screen w-64 bg-gray-800 shadow-xl p-5 z-30 transition-all duration-300 ease-in-out overflow-y-auto content-panel"
+    >
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-white">Content Management</h3>
+          <button
+            @click="toggleContentMenu"
+            class="p-1 rounded-md hover:bg-gray-700 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-5 h-5"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="space-y-6">
+          <div v-for="(category, catIndex) in contentCategories" :key="catIndex" class="border-b border-gray-700 pb-5">
+            <h4 class="text-indigo-400 font-medium mb-3">{{ category.name }}</h4>
+            <ul class="space-y-2">
+              <li v-for="(item, itemIndex) in category.items" :key="itemIndex">
+                <a 
+                  :href="item.path" 
+                  class="block text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-gray-700 transition-colors"
+                >
+                  {{ item.name }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Overlay for mobile -->
     <div
       @click="closeSidebar"
@@ -154,6 +253,13 @@
         'fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300',
         isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
       ]"
+    ></div>
+    
+    <!-- Additional overlay for content panel on smaller screens -->
+    <div
+      v-if="showContentSubMenu && isLargeScreen"
+      @click="toggleContentMenu"
+      class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-20 hidden md:block lg:hidden transition-opacity duration-300"
     ></div>
   </div>
 </template>
@@ -241,6 +347,8 @@ export default {
       isSidebarOpen: false,
       autoHideTimer: null,
       searchQuery: "",
+      showContentSubMenu: false,
+      isLargeScreen: false,
       mainMenu: [
         {
           name: "Dashboard",
@@ -263,6 +371,38 @@ export default {
         },
         { name: "Reports", path: "/admin-panel/reports", icon: ReportsIcon },
       ],
+      contentCategories: [
+        {
+          id: 1, 
+          name: "Home Page",
+          items: [
+            { id: 1, name: "Title & Main Description", path: "/admin-panel/content/home/title" },
+            { id: 2, name: "Hero/Banner Image", path: "/admin-panel/content/home/banner" },
+            { id: 3, name: "CTA Text", path: "/admin-panel/content/home/cta" },
+            { id: 4, name: "Customer Testimonials", path: "/admin-panel/content/home/testimonials" },
+            { id: 5, name: "Statistics/Achievements", path: "/admin-panel/content/home/statistics" }
+          ]
+        },
+        {
+          id: 2,
+          name: "Projects/Portfolio",
+          items: [
+            { id: 1, name: "All Projects", path: "/admin-panel/content/projects/all" },
+            { id: 2, name: "Residential", path: "/admin-panel/content" },
+            { id: 3, name: "Commercial", path: "/admin-panel/content" },
+            { id: 4, name: "Rennovation", path: "/admin-panel/content" },
+          ]
+        },
+        {
+          id: 3,
+          name: "Services Page",
+          items: [
+            { id: 1, name: "Services List", path: "/admin-panel/content/services/list" },
+            { id: 2, name: "Service Details", path: "/admin-panel/content/services/details" },
+            { id: 3, name: "Service Images/Icons", path: "/admin-panel/content/services/media" }
+          ]
+        }
+      ]
     };
   },
   computed: {
@@ -277,7 +417,7 @@ export default {
       return this.managementMenu.filter((item) =>
         item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    },
+    }
   },
   methods: {
     openSidebar() {
@@ -289,6 +429,10 @@ export default {
     },
     closeSidebar() {
       this.isSidebarOpen = false;
+    },
+    toggleContentMenu() {
+      this.showContentSubMenu = !this.showContentSubMenu;
+      this.resetAutoHideTimer();
     },
     handleSearch() {
       // Reset auto-hide timer when searching
@@ -319,12 +463,23 @@ export default {
       document.removeEventListener("keydown", this.resetAutoHideTimer);
       document.removeEventListener("click", this.resetAutoHideTimer);
     },
+    checkScreenSize() {
+      this.isLargeScreen = window.innerWidth >= 1024;
+      // If screen size changes and becomes small, we might need to adjust UI
+      if (!this.isLargeScreen && this.showContentSubMenu) {
+        // Could choose to close content panel here, but we'll leave it open and 
+        // show it in mobile-friendly way inside the sidebar
+      }
+    }
   },
   mounted() {
     this.setupAutoHide();
+    this.checkScreenSize();
+    window.addEventListener('resize', this.checkScreenSize);
   },
   beforeUnmount() {
     this.clearEventListeners();
+    window.removeEventListener('resize', this.checkScreenSize);
     if (this.autoHideTimer) {
       clearTimeout(this.autoHideTimer);
     }
@@ -349,9 +504,23 @@ export default {
   }
 }
 
+/* Additional spacing when content panel is open */
+@media (min-width: 1024px) {
+  .sidebar-container.content-panel-open {
+    margin-left: 34rem; /* 18rem + 16rem for both panels */
+  }
+}
+
 /* Transition effect for sidebar */
 .sidebar {
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Transition effect for content panel */
+.content-panel {
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
 }
 
 /* Active state for menu items */
@@ -362,15 +531,18 @@ export default {
 }
 
 /* Custom scrollbar */
-.sidebar::-webkit-scrollbar {
+.sidebar::-webkit-scrollbar,
+.content-panel::-webkit-scrollbar {
   width: 5px;
 }
 
-.sidebar::-webkit-scrollbar-track {
+.sidebar::-webkit-scrollbar-track,
+.content-panel::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.sidebar::-webkit-scrollbar-thumb {
+.sidebar::-webkit-scrollbar-thumb,
+.content-panel::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 20px;
 }
