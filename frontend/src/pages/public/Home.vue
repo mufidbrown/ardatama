@@ -5,9 +5,43 @@
       <div class="container mx-auto px-4">
         <div class="flex justify-between items-center h-16">
           <!-- Logo -->
-          <div class="flex-shrink-0">
+          <!-- <div class="flex-shrink-0">
             <a href="#">
               <img src="@/assets/images/logo.jpg" alt="Ardatama Logo" class="h-10">
+            </a>
+          </div> -->
+
+          <!-- iki di pakai sementara ojo dihapus -->
+           <!-- <div class="flex-shrink-0">
+            <a href="#">
+              <img :src="logoPath" alt="Company Logo" class="h-10">
+            </a>
+          </div> -->
+
+          <!-- <div class="flex-shrink-0">
+            <a href="#">
+              <img :src="logoPath" :alt="logoAlt" :class="`h-${logoHeight}`">
+            </a>
+          </div> -->
+
+          <!-- <div class="flex-shrink-0">
+            <a href="#">
+              <img :src="logoUrl" alt="Ardatama Logo" class="h-10" />
+            </a>
+          </div> -->
+
+          <!-- Logo Section -->
+          <div class="flex-shrink-0 flex items-center">
+            <a href="#" class="flex items-center">
+              <img 
+                v-if="logoUrl" 
+                :src="logoUrl" 
+                alt="Company Logo" 
+                class="h-10 w-auto object-contain"
+              />
+              <span v-else class="text-gray-800 font-bold text-xl">
+                <!-- BuildArch -->
+              </span>
             </a>
           </div>
 
@@ -54,12 +88,16 @@
     <!-- Hero Section -->
     <section class="relative h-screen pt-16">
       <!-- Hero Background Image -->
-      <div class="absolute inset-0">
+      <!-- <div class="absolute inset-0">
         <img src="@/assets/images/hero-property.jpg" alt="Modern Architecture" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-black opacity-50"></div>
-      </div>
+      </div> -->
+        <div class="absolute inset-0">
+          <img :src="backgroundImage" alt="Background" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-black opacity-50"></div>
+        </div>
       
-      <!-- Hero Content -->
+      <!-- Title & Main Description -->
       <div class="relative container mx-auto px-4 h-full flex flex-col justify-center">
         <h1 class="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4">Building Dreams Into Reality</h1>
         <p class="text-lg md:text-xl text-white mb-8 max-w-xl">Expert construction and architectural solutions for residential and commercial projects with uncompromising quality.</p>
@@ -108,6 +146,7 @@
     <section class="py-16 bg-gray-50">
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
+          <!-- Title & Main Description Projects -->
           <h2 class="text-3xl font-bold mb-2">Featured Projects</h2>
           <p class="text-gray-600">Explore our portfolio of exceptional constructions and designs</p>
         </div>
@@ -357,18 +396,55 @@
 </template>
 
 <script>
+import LogoService from '@/services/LogoService'; // Import the LogoService
+
 export default {
   name: 'HomePage',
   data() {
     return {
-      isOpen: false
+      isOpen: false,
+      logoUrl: null,
+      isLoading: false,
+      error: null
+    };
+  },
+  created() {
+    // Fetch the logo when the component is created
+    this.fetchLogo();
+  },
+  methods: {
+    // Fetch logo from API using the shared service
+    async fetchLogo() {
+      this.isLoading = true;
+      
+      try {
+        const logoData = await LogoService.fetchLogo();
+        
+        // If logo data exists, set the URL
+        if (logoData && logoData.imageUrl) {
+          this.logoUrl = logoData.imageUrl;
+        } else {
+          // If no logo available, use default or set to null
+          this.logoUrl = null;
+        }
+      } catch (error) {
+        console.error('Error fetching logo:', error);
+        this.error = 'Failed to load logo.';
+        // Use default logo or null if error occurs
+        this.logoUrl = null;
+      } finally {
+        this.isLoading = false;
+      }
     }
   },
   metaInfo: {
-    title: 'Home - BuildArch Construction & Architecture'
-  }
-}
+    title: 'Home - BuildArch Construction & Architecture',
+  },
+};
 </script>
+
+
+
 
 <style>
 html {

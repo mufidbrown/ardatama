@@ -14,8 +14,9 @@ public class Content {
     private String title;
     private String description;
     private String contentText;
+
+    @Column(length = 1000) // URL bisa panjang
     private String imageUrl; // URL gambar atau file
-    private byte[] imageData;
     private boolean isPublished;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -68,14 +69,6 @@ public class Content {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
     }
 
     public boolean isPublished() {

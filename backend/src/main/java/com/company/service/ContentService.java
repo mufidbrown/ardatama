@@ -2,7 +2,6 @@ package com.company.service;
 
 import com.company.dto.ContentRequestDTO;
 import com.company.dto.ContentResponseDTO;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -54,15 +53,5 @@ public interface ContentService {
      * @return ContentResponseDTO berisi data konten yang sudah dipublikasikan
      */
     ContentResponseDTO publishContent(Long contentId);
-
-    /**
-     * Mengunggah gambar dan mengembalikan URL gambar yang diunggah.
-     *
-     * @param file File gambar yang akan diunggah
-     * @return URL gambar yang dapat diakses
-     */
-    String uploadImage(MultipartFile file, Long contentId);
-    byte[] getImage(Long contentId);
-
 }
 

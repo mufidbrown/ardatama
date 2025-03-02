@@ -376,21 +376,19 @@ export default {
           id: 1, 
           name: "Home Page",
           items: [
-            { id: 1, name: "Title & Main Description", path: "/admin-panel/content/home/title" },
-            { id: 2, name: "Hero/Banner Image", path: "/admin-panel/content/home/banner" },
-            { id: 3, name: "CTA Text", path: "/admin-panel/content/home/cta" },
-            { id: 4, name: "Customer Testimonials", path: "/admin-panel/content/home/testimonials" },
-            { id: 5, name: "Statistics/Achievements", path: "/admin-panel/content/home/statistics" }
+            { id: 1, name: "Logo", path: "/admin-panel/logo" },
+            { id: 2, name: "Banner", path: "/admin-panel/banner" },
+            { id: 3, name: "Title & Main Description", path: "/admin-panel/content/home/banner" }
           ]
         },
         {
           id: 2,
           name: "Projects/Portfolio",
           items: [
-            { id: 1, name: "All Projects", path: "/admin-panel/content/projects/all" },
+            { id: 1, name: "Title & Main Description Projects ", path: "/admin-panel/content/home/banner" },
             { id: 2, name: "Residential", path: "/admin-panel/content" },
             { id: 3, name: "Commercial", path: "/admin-panel/content" },
-            { id: 4, name: "Rennovation", path: "/admin-panel/content" },
+            { id: 4, name: "Rennovation", path: "/admin-panel/content" }
           ]
         },
         {

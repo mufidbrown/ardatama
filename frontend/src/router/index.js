@@ -26,6 +26,10 @@ import Settings from "@/pages/admin/Settings.vue";
 import ContentDetail from "@/pages/admin/ContentDetail.vue";
 import CreateContent from "@/pages/admin/CreateContent.vue";
 import UpdateContent from "@/pages/admin/UpdateContent.vue";
+import Logo from "@/pages/admin/Logo.vue";
+import Banner from "@/pages/admin/Banner.vue";
+
+
 
 const routes = [
   { path: "/login", redirect: "/auth/login" },
@@ -74,6 +78,9 @@ const routes = [
       { path: "content", component: Content },
       { path: "users", component: Users },
       { path: "settings", component: Settings },
+      { path: "logo", component: Logo },
+      { path: "banner", component: Banner },
+
     ],
   },
 ];

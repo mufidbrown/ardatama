@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/abcdb
+    username: mufiddev
+    password: bismillah
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ilhammufid@students.amikom.ac.id
+    password: dsbm ndce uaqc exop
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+      logging:
+        level:
+          org.springframework.security: DEBUG
+          com.yourpackage: DEBUG
+
+
+  web:
+    resources:
+      static-locations:
+        - classpath:/static/
+        - file:uploads/
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

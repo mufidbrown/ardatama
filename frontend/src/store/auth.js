@@ -2,82 +2,62 @@ import { defineStore } from "pinia";
 import api from "@/api/api";
 import axios from "axios";
 
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
-    token: localStorage.getItem("token") || null, // ✅ Gunakan localStorage untuk mempertahankan sesi
+    token: localStorage.getItem("token") || null, // Cek token di localStorage pada saat aplikasi dimulai
   }),
 
   actions: {
+    // Fungsi login
     async login(credentials) {
       try {
         const response = await axios.post("http://localhost:8080/api/auth/signin", credentials);
         console.log("✅ Response dari backend:", response.data);
-    
+
         if (response.data && response.data.token) {
-          this.setToken(response.data.token); // ✅ Gunakan setToken agar token tersimpan dengan baik
-          return true; // ✅ Beri indikasi bahwa login sukses
+          this.setToken(response.data.token); // Menyimpan token
+          return true; // Login berhasil
         } else {
           throw new Error("Token tidak ditemukan dalam response!");
         }
       } catch (error) {
         console.error("❌ Login error:", error.response?.data || error.message);
-        throw error;
+        throw error; // Tangani error jika login gagal
       }
     },
-      
 
+    // Fungsi untuk menyimpan token dan menetapkan header di axios
     setToken(token) {
       this.token = token;
-      localStorage.setItem("token", token);
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    
+      localStorage.setItem("token", token); // Simpan token di localStorage
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Set header global untuk axios
       console.log("🔍 Token disimpan di localStorage:", localStorage.getItem("token"));
     },
 
-    async register(userData) {
-      try {
-        console.log("🔄 Sending registration data:", userData);
-        await api.post("/api/auth/signup", userData);
-        console.log("✅ Registration successful");
-      } catch (error) {
-        console.error("❌ Registration failed:", error.response?.data || error.message);
-        throw error;
-      }
-    },
-
-    // async logout() {
-    //   try {
-    //     console.log("🔄 Logging out...");
-    //     await api.post("/api/auth/signout");
-    //     console.log("✅ Logout successful");
-    //   } catch (error) {
-    //     console.error("❌ Logout failed:", error.response?.data || error.message);
-    //   } finally {
-    //     this.clearSession(); // ✅ Pastikan sesi selalu dihapus
-    //   }
-    // },
+    // Fungsi logout
     async logout() {
       try {
         console.log("🔄 Logging out...");
-        await api.post("/api/auth/signout"); // Logout dari backend
+        await api.post("/api/auth/signout"); // Logout di backend jika diperlukan
       } catch (error) {
         console.error("❌ Logout failed:", error.response?.data || error.message);
       } finally {
-        this.clearSession(); // ✅ Hapus sesi
-        window.location.href = "/auth/login"; // ✅ Redirect ke login setelah logout
+        this.clearSession(); // Hapus sesi setelah logout
+        window.location.href = "/auth/login"; // Redirect ke halaman login
       }
     },
-    
-    
 
+    // Fungsi untuk menghapus sesi (token dan user)
     clearSession() {
       this.token = null;
       this.user = null;
-      localStorage.removeItem("token"); // ✅ Hapus token dari localStorage
-      delete api.defaults.headers.common["Authorization"]; // ✅ Hapus header
+      localStorage.removeItem("token"); // Hapus token dari localStorage
+      delete api.defaults.headers.common["Authorization"]; // Hapus header Authorization di axios
     },
 
+    // Fungsi untuk mengambil profil pengguna
     async fetchUser() {
       if (!this.token) {
         console.warn("⚠️ No token found, skipping fetchUser");
@@ -91,10 +71,10 @@ export const useAuthStore = defineStore("auth", {
       } catch (error) {
         console.error("❌ Fetching user failed:", error.response?.data || error.message);
 
-        // ✅ Jika token expired atau tidak valid, hapus sesi dan redirect ke login
+        // Tangani jika token tidak valid atau kadaluarsa
         if (error.response?.status === 401) {
-          this.clearSession();
-          window.location.href = "/login"; // Redirect ke login
+          this.clearSession(); // Clear sesi jika token tidak valid
+          window.location.href = "/auth/login"; // Redirect ke halaman login
         }
       }
     },

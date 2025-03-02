@@ -10,15 +10,8 @@ import com.company.repository.UserRepository;
 import com.company.security.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -135,31 +128,6 @@ public class ContentServiceImpl implements ContentService {
                 updatedContent.getImageUrl(),
                 updatedContent.isPublished()
         );
-    }
-
-
-    @Override
-    public String uploadImage(MultipartFile file, Long contentId) {
-        try {
-            Optional<Content> contentOptional = contentRepository.findById(contentId);
-            if (contentOptional.isPresent()) {
-                Content content = contentOptional.get();
-                content.setImageData(file.getBytes()); // Simpan gambar dalam bentuk byte array
-                contentRepository.save(content);
-                return "Gambar berhasil diunggah!";
-            } else {
-                return "Konten tidak ditemukan!";
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Gagal mengupload gambar", e);
-        }
-    }
-
-    @Override
-    public byte[] getImage(Long contentId) {
-        Content content = contentRepository.findById(contentId)
-                .orElseThrow(() -> new RuntimeException("Konten tidak ditemukan"));
-        return content.getImageData();
     }
 }
 

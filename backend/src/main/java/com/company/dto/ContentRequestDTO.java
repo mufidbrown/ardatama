@@ -5,17 +5,13 @@ public class ContentRequestDTO {
     private String description;
     private String contentText;
     private String imageUrl;
-    private byte[] imageData;
 
     // Constructor
-
-
-    public ContentRequestDTO(String title, String description, String contentText, String imageUrl, byte[] imageData) {
+    public ContentRequestDTO(String title, String description, String contentText, String imageUrl) {
         this.title = title;
         this.description = description;
         this.contentText = contentText;
         this.imageUrl = imageUrl;
-        this.imageData = imageData;
     }
 
     public String getTitle() {
@@ -48,13 +44,5 @@ public class ContentRequestDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
     }
 }

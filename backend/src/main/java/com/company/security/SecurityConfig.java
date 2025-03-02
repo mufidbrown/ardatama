@@ -41,6 +41,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/content/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/content/*").permitAll()  // ✅ Perbaikan wildcard
                         .requestMatchers(HttpMethod.POST, "/api/content/create").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/logo/upload").authenticated()  // Pastikan endpoint /upload diizinkan hanya untuk user terautentikasi
+
                         .requestMatchers(HttpMethod.PUT, "/api/content/**").authenticated()  // ✅ Perbaikan wildcard
                         .requestMatchers(HttpMethod.DELETE, "/api/content/**").authenticated()  // ✅ Perbaikan wildcard
                         .requestMatchers(HttpMethod.PUT, "/api/content/**/publish").authenticated()  // ✅ Perbaikan wildcard

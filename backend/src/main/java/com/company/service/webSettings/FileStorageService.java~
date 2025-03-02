@@ -1,0 +1,4 @@
+package com.company.service.webSettings;
+
+public class FileStorageService {
+}

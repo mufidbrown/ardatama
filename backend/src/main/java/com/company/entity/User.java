@@ -22,6 +22,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Content> contents;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LogoEntity> logoEntities;
+
+
     public User() {}
 
     public User(String username, String password, String email, String fullName) {
