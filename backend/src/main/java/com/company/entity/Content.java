@@ -14,7 +14,9 @@ public class Content {
     private String title;
     private String description;
     private String contentText;
-    private String imageUrl; // URL gambar atau file
+
+    @Column(length = 1000) // URL bisa panjang
+    private String imageUrl;
     private boolean isPublished;
 
     @ManyToOne(fetch = FetchType.LAZY)
