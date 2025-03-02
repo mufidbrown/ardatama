@@ -48,23 +48,25 @@ public class UserController {
      * @return ResponseEntity dengan status berhasil
      */
 
+
+
+//    @PutMapping("/profile")
+//    public ResponseEntity<String> updateUserProfile(@RequestParam String username,
+//                                                    @RequestBody UserProfileResponse profile) {
+//        // Memperbarui profil pengguna
+//        userService.updateUserProfile(username, profile);
+//        return ResponseEntity.ok("Profile updated successfully");
+//    }
+
     /**
      * Endpoint untuk menambahkan konten baru
      */
-//    @PostMapping("/create")
-//    @PreAuthorize("isAuthenticated()") // Hanya yang terautentikasi yang bisa mengakses
-//    public ResponseEntity<ContentResponseDTO> addContent(@RequestBody ContentRequestDTO contentRequestDTO) {
-//        ContentResponseDTO contentResponseDTO = contentService.addContent(contentRequestDTO);
-//        return new ResponseEntity<>(contentResponseDTO, HttpStatus.CREATED);
-//    }
-
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()") // Hanya yang login bisa mengakses
     public ResponseEntity<ContentResponseDTO> addContent(@RequestBody ContentRequestDTO contentRequestDTO) {
         ContentResponseDTO contentResponseDTO = contentService.addContent(contentRequestDTO);
         return new ResponseEntity<>(contentResponseDTO, HttpStatus.CREATED);
     }
-
 
     /**
      * Endpoint untuk memperbarui konten berdasarkan ID

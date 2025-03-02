@@ -31,7 +31,7 @@ public class ContentServiceImpl implements ContentService {
     private UserRepository userRepository;
 
     @Autowired
-    private AuthenticationFacade authenticationFacade; // Untuk mengambil user yang login
+    private AuthenticationFacade authenticationFacade;
 
     @Override
     public ContentResponseDTO addContent(ContentRequestDTO contentRequestDTO) {
