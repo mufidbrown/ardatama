@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class ContentServiceImpl implements ContentService {
     private UserRepository userRepository;
 
     @Autowired
-    private AuthenticationFacade authenticationFacade;
+    private AuthenticationFacade authenticationFacade; // Untuk mengambil user yang login
 
     @Override
     public ContentResponseDTO addContent(ContentRequestDTO contentRequestDTO) {
@@ -137,29 +136,16 @@ public class ContentServiceImpl implements ContentService {
         );
     }
 
-
     @Override
-    public String uploadImage(MultipartFile file, Long contentId) {
+    public String uploadImage(MultipartFile file) {
         try {
-            Optional<Content> contentOptional = contentRepository.findById(contentId);
-            if (contentOptional.isPresent()) {
-                Content content = contentOptional.get();
-                content.setImageData(file.getBytes()); // Simpan gambar dalam bentuk byte array
-                contentRepository.save(content);
-                return "Gambar berhasil diunggah!";
-            } else {
-                return "Konten tidak ditemukan!";
-            }
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path path = Paths.get("uploads/" + fileName);
+            Files.write(path, file.getBytes());
+            return "/uploads/" + fileName; // URL untuk diakses dari frontend
         } catch (IOException e) {
             throw new RuntimeException("Gagal mengupload gambar", e);
         }
-    }
-
-    @Override
-    public byte[] getImage(Long contentId) {
-        Content content = contentRepository.findById(contentId)
-                .orElseThrow(() -> new RuntimeException("Konten tidak ditemukan"));
-        return content.getImageData();
     }
 }
 
