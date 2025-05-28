@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private EmailService emailService;
+    private EmailService emailService;                     
 
     private final Map<String, String> resetTokenStore = new HashMap<>();
 
