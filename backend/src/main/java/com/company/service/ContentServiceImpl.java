@@ -3,8 +3,11 @@ package com.company.service;
 import com.company.dto.ContentRequestDTO;
 import com.company.dto.ContentResponseDTO;
 import com.company.entity.Content;
+import com.company.entity.User;
 import com.company.exception.ResourceNotFoundException;
 import com.company.repository.ContentRepository;
+import com.company.repository.UserRepository;
+import com.company.security.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +20,26 @@ public class ContentServiceImpl implements ContentService {
     @Autowired
     private ContentRepository contentRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AuthenticationFacade authenticationFacade;
+
     @Override
     public ContentResponseDTO addContent(ContentRequestDTO contentRequestDTO) {
+        // Ambil user yang sedang login dari Spring Security
+        String username = authenticationFacade.getAuthenticatedUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Content content = new Content();
         content.setTitle(contentRequestDTO.getTitle());
         content.setDescription(contentRequestDTO.getDescription());
         content.setContentText(contentRequestDTO.getContentText());
         content.setImageUrl(contentRequestDTO.getImageUrl());
-        content.setPublished(false);  // Default tidak dipublikasikan
+        content.setPublished(false);
+        content.setUser(user); // Set user sebelum save
 
         Content savedContent = contentRepository.save(content);
 

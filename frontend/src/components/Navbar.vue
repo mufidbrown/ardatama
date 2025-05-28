@@ -6,11 +6,7 @@
       <li><router-link to="/about" class="hover:underline">About</router-link></li>
       <li><router-link to="/services" class="hover:underline">Services</router-link></li>
       <li><router-link to="/contact" class="hover:underline">Contact</router-link></li>
-      <li v-if="!authStore.token"><router-link to="/login" class="hover:underline">Login</router-link></li>
-      <li v-if="!authStore.token"><router-link to="/register" class="hover:underline">Register</router-link></li>
-      <li v-if="authStore.token">
-        <button @click="handleLogout" class="hover:underline bg-red-500 px-3 py-1 rounded">Logout</button>
-      </li>
+     
     </ul>
   </nav>
 </template>

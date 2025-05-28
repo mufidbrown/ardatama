@@ -1,6 +1,7 @@
 package com.company.service;
 
 import com.company.payload.UserProfileResponse;
+import com.company.payload.UserProfileUpdateRequest;
 
 public interface UserService {
     /**
@@ -15,8 +16,7 @@ public interface UserService {
      * Memperbarui profil pengguna.
      *
      * @param username Username pengguna
-     * @param profile Data profil yang diperbarui
      */
-    void updateUserProfile(String username, UserProfileResponse profile);
+    UserProfileResponse updateUserProfile(String username, UserProfileUpdateRequest request);
 }
 
